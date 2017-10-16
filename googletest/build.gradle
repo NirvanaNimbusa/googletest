@@ -1,5 +1,6 @@
 plugins {
     id 'cpp-library'
+    id 'maven-publish'
 }
 
 group = 'com.google'
@@ -17,4 +18,12 @@ compileReleaseCpp {
 
 compileDebugCpp {
     macros GTEST_CREATE_SHARED_LIBRARY: '1'
+}
+
+publishing {
+    repositories {
+        maven {
+            url = 'https://repo.gradle.org'
+        }
+    }
 }
