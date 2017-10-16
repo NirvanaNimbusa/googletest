@@ -1,1 +1,2 @@
-include 'googletest'
+rootProject.name = 'googletest'
+rootProject.projectDir = file('googletest')
