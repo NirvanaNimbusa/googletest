@@ -1,0 +1,36 @@
+plugins {
+    id 'cpp-library'
+    id 'maven-publish'
+}
+
+group = 'org.gradle'
+version = '1.9.0'
+
+library {
+    source.from file('googletest/src/gtest-all.cc')
+    publicHeaders.from file('googletest/include')
+    privateHeaders.from file('googletest')
+}
+
+compileReleaseCpp {
+    macros GTEST_CREATE_SHARED_LIBRARY: '1'
+}
+
+compileDebugCpp {
+    macros GTEST_CREATE_SHARED_LIBRARY: '1'
+}
+
+linkDebug.installName = 'libgoogletest.dylib'
+linkRelease.installName = 'libgoogletest.dylib'
+
+publishing {
+    repositories {
+        maven {
+            url = 'https://repo.gradle.org/gradle/libs-releases-local'
+            credentials {
+                username = gartifactoryUsername
+                password = gartifactoryPassword
+            }
+        }
+    }
+}
