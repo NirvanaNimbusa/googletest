@@ -27,9 +27,12 @@ publishing {
     repositories {
         maven {
             url = 'https://repo.gradle.org/gradle/libs-releases-local'
-            credentials {
-                username = gartifactoryUsername
-                password = gartifactoryPassword
+            if (project.hasProperty("gartifactoryUsername") 
+                && project.hasProperty("gartifactoryPassword")) {
+                credentials {
+                    username = gartifactoryUsername
+                    password = gartifactoryPassword
+                }
             }
         }
     }
