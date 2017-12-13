@@ -27,9 +27,6 @@ if (OperatingSystem.current().linux) {
     linkRelease.linkerArgs.add('-lpthread')
 }
 
-linkDebug.installName = 'libgoogletest.dylib'
-linkRelease.installName = 'libgoogletest.dylib'
-
 publishing {
     repositories {
         maven {
