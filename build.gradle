@@ -15,17 +15,16 @@ library {
 }
 
 compileReleaseCpp {
-    if (OperatingSystem.current().linux) {
-        linkerArgs.add('-lpthread')
-    }
     macros GTEST_CREATE_SHARED_LIBRARY: '1'
 }
 
 compileDebugCpp {
-    if (OperatingSystem.current().linux) {
-        linkerArgs.add('-lpthread')
-    }
     macros GTEST_CREATE_SHARED_LIBRARY: '1'
+}
+
+if (OperatingSystem.current().linux) {
+    linkDebug.linkerArgs.add('-lpthread')
+    linkRelease.linkerArgs.add('-lpthread')
 }
 
 linkDebug.installName = 'libgoogletest.dylib'
