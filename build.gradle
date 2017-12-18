@@ -14,11 +14,17 @@ library {
 
 tasks.withType(CppCompile) {
     macros GTEST_CREATE_SHARED_LIBRARY: '1'
+    if (toolChain instanceof Gcc) {
+        compilerArgs.add('-std=c++03')
+    }
 }
 
 tasks.withType(LinkSharedLibrary) {
     if (targetPlatform.operatingSystem.linux) {
         linkerArgs.add('-lpthread')
+    }
+    if (toolChain instanceof Gcc) {
+        linkerArgs.add('-std=c++03')
     }
 }
 
