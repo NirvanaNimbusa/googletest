@@ -1,12 +1,10 @@
-import org.gradle.internal.os.OperatingSystem
-
 plugins {
     id 'cpp-library'
     id 'maven-publish'
 }
 
-group = 'org.gradle'
-version = '1.9.0'
+group = 'org.gradle.cpp-samples'
+version = '1.9.0-SNAPSHOT'
 
 library {
     source.from file('googletest/src/gtest-all.cc')
@@ -14,18 +12,17 @@ library {
     privateHeaders.from file('googletest')
 }
 
-compileReleaseCpp {
+tasks.withType(CppCompile) {
     macros GTEST_CREATE_SHARED_LIBRARY: '1'
 }
 
-compileDebugCpp {
-    macros GTEST_CREATE_SHARED_LIBRARY: '1'
+tasks.withType(LinkSharedLibrary) {
+    if (targetPlatform.operatingSystem.linux) {
+        linkerArgs.add('-lpthread')
+    }
 }
 
-if (OperatingSystem.current().linux) {
-    linkDebug.linkerArgs.add('-lpthread')
-    linkRelease.linkerArgs.add('-lpthread')
-}
+def targetPlatform = compileDebugCpp.targetPlatform
 
 publishing {
     repositories {
@@ -39,5 +36,8 @@ publishing {
                 }
             }
         }
+    }
+    publications.withType(MavenPublication) {
+        artifactId = "${artifactId}_${targetPlatform.operatingSystem.name.replace(" ", "").toLowerCase()}_4.5"
     }
 }
