@@ -23,6 +23,8 @@ tasks.withType(LinkSharedLibrary) {
 }
 
 def targetPlatform = compileDebugCpp.targetPlatform
+def osName = targetPlatform.operatingSystem.name.replace(" ", "").toLowerCase()
+def archName = targetPlatform.architecture.name.replace(" ", "").toLowerCase()
 
 publishing {
     repositories {
@@ -38,6 +40,6 @@ publishing {
         }
     }
     publications.withType(MavenPublication) {
-        artifactId = "${artifactId}_${targetPlatform.operatingSystem.name.replace(" ", "").toLowerCase()}_4.5"
+        artifactId = "${artifactId}_${osName}_${archName}_4.5"
     }
 }
