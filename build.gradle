@@ -27,7 +27,7 @@ def targetPlatform = compileDebugCpp.targetPlatform
 publishing {
     repositories {
         maven {
-            url = 'https://repo.gradle.org/gradle/libs-releases-local'
+            url = 'https://repo.gradle.org/gradle/libs-snapshots-local'
             if (project.hasProperty("gartifactoryUsername") 
                 && project.hasProperty("gartifactoryPassword")) {
                 credentials {
