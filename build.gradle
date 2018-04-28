@@ -10,7 +10,7 @@ library {
     operatingSystems = [
         objects.named(OperatingSystemFamily, OperatingSystemFamily.WINDOWS),
         objects.named(OperatingSystemFamily, OperatingSystemFamily.LINUX),
-        objects.named(OperatingSystemFamily, OperatingSystemFamily.MAC_OS)
+        objects.named(OperatingSystemFamily, OperatingSystemFamily.MACOS)
     ]
     source.from file('googletest/src/gtest-all.cc')
     publicHeaders.from file('googletest/include')
@@ -45,9 +45,6 @@ tasks.withType(LinkSharedLibrary) {
     }
 }
 
-// TODO: Get rid of this once the format is stable enough
-def metadataFormat = org.gradle.api.internal.artifacts.ivyservice.ivyresolve.parser.ModuleMetadataParser.FORMAT_VERSION
-
 publishing {
     repositories {
         maven {
@@ -60,8 +57,5 @@ publishing {
                 }
             }
         }
-    }
-    publications.withType(MavenPublication) {
-        artifactId = "${artifactId}_${metadataFormat}"
     }
 }
