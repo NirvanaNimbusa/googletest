@@ -7,6 +7,11 @@ group = 'org.gradle.cpp-samples'
 version = '1.9.0-SNAPSHOT'
 
 library {
+    operatingSystems = [
+        objects.named(OperatingSystemFamily, OperatingSystemFamily.WINDOWS),
+        objects.named(OperatingSystemFamily, OperatingSystemFamily.LINUX),
+        objects.named(OperatingSystemFamily, OperatingSystemFamily.MAC_OS)
+    ]
     source.from file('googletest/src/gtest-all.cc')
     publicHeaders.from file('googletest/include')
     privateHeaders.from file('googletest')
@@ -14,23 +19,34 @@ library {
 
 tasks.withType(CppCompile) {
     macros GTEST_CREATE_SHARED_LIBRARY: '1'
-    if (toolChain instanceof Gcc) {
-        compilerArgs.add('-std=c++03')
+    compilerArgs.addAll toolChain.map { NativeToolChain toolChain ->
+        List<String> compilerSpecificArgs = []
+        if (toolChain instanceof Gcc) {
+            compilerSpecificArgs << '-std=c++03'
+        }
+        return compilerSpecificArgs
     }
 }
 
 tasks.withType(LinkSharedLibrary) {
-    if (targetPlatform.operatingSystem.linux) {
-        linkerArgs.add('-lpthread')
+    linkerArgs.addAll toolChain.map { NativeToolChain toolChain ->
+        List<String> compilerSpecificArgs = []
+        if (toolChain instanceof Gcc) {
+            compilerSpecificArgs << '-std=c++03'
+        }
+        return compilerSpecificArgs
     }
-    if (toolChain instanceof Gcc) {
-        linkerArgs.add('-std=c++03')
+    linkerArgs.addAll targetPlatform.map { NativePlatform targetPlatform ->
+        List<String> platformSpecificArgs = []
+        if (targetPlatform.operatingSystem.linux) {
+            platformSpecificArgs << '-lpthread'
+        }
+        return platformSpecificArgs
     }
 }
 
-def targetPlatform = compileDebugCpp.targetPlatform
-def osName = targetPlatform.operatingSystem.name.replace(" ", "").toLowerCase()
-def archName = targetPlatform.architecture.name.replace(" ", "").toLowerCase()
+// TODO: Get rid of this once the format is stable enough
+def metadataFormat = org.gradle.api.internal.artifacts.ivyservice.ivyresolve.parser.ModuleMetadataParser.FORMAT_VERSION
 
 publishing {
     repositories {
@@ -46,6 +62,6 @@ publishing {
         }
     }
     publications.withType(MavenPublication) {
-        artifactId = "${artifactId}_${osName}_${archName}_4.5"
+        artifactId = "${artifactId}_${metadataFormat}"
     }
 }
