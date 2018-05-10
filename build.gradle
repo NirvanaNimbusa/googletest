@@ -19,6 +19,7 @@ library {
 
 tasks.withType(CppCompile) {
     macros GTEST_CREATE_SHARED_LIBRARY: '1'
+    macros _GLIBCXX_USE_CXX11_ABI: '0'
     compilerArgs.addAll toolChain.map { NativeToolChain toolChain ->
         List<String> compilerSpecificArgs = []
         if (toolChain instanceof Gcc) {
@@ -45,7 +46,13 @@ tasks.withType(LinkSharedLibrary) {
     }
 }
 
+def metadataFormat = org.gradle.api.internal.artifacts.ivyservice.ivyresolve.parser.ModuleMetadataParser.FORMAT_VERSION
 publishing {
+    project.afterEvaluate {
+        publications.withType(MavenPublication) {
+            artifactId = "${artifactId}_${metadataFormat}"
+        }        
+    }
     repositories {
         maven {
             url = 'https://repo.gradle.org/gradle/libs-snapshots-local'
