@@ -4,7 +4,8 @@ plugins {
 }
 
 group = 'org.gradle.cpp-samples'
-version = '1.9.0-SNAPSHOT'
+// Encode the Gradle metadata format in the version, until this is stable
+version = '1.9.0-gr1-SNAPSHOT'
 
 library {
     targetMachines = [
@@ -48,13 +49,7 @@ tasks.withType(LinkSharedLibrary) {
     }
 }
 
-def metadataFormat = "_gradle_1"
 publishing {
-    project.afterEvaluate {
-        publications.withType(MavenPublication) {
-            artifactId = "${artifactId}_${metadataFormat}"
-        }        
-    }
     repositories {
         maven {
             url = 'https://repo.gradle.org/gradle/libs-snapshots-local'
