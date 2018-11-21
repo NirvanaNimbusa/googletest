@@ -5,7 +5,7 @@ plugins {
 
 group = 'org.gradle.cpp-samples'
 // Encode the Gradle metadata format in the version, until this is stable
-version = '1.9.0-gr1-SNAPSHOT'
+version = '1.9.0-g2-SNAPSHOT'
 
 library {
     targetMachines = [
@@ -20,33 +20,6 @@ library {
 
 tasks.withType(CppCompile) {
     macros.put("GTEST_CREATE_SHARED_LIBRARY", '1')
-    macros.put("_GLIBCXX_USE_CXX11_ABI", '0')
-
-    println macros
-    compilerArgs.addAll toolChain.map { NativeToolChain toolChain ->
-        List<String> compilerSpecificArgs = []
-        if (toolChain instanceof Gcc) {
-            compilerSpecificArgs << '-std=c++03'
-        }
-        return compilerSpecificArgs
-    }
-}
-
-tasks.withType(LinkSharedLibrary) {
-    linkerArgs.addAll toolChain.map { NativeToolChain toolChain ->
-        List<String> compilerSpecificArgs = []
-        if (toolChain instanceof Gcc) {
-            compilerSpecificArgs << '-std=c++03'
-        }
-        return compilerSpecificArgs
-    }
-    linkerArgs.addAll targetPlatform.map { NativePlatform targetPlatform ->
-        List<String> platformSpecificArgs = []
-        if (targetPlatform.operatingSystem.linux) {
-            platformSpecificArgs << '-lpthread'
-        }
-        return platformSpecificArgs
-    }
 }
 
 publishing {
