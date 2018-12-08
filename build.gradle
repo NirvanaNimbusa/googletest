@@ -9,9 +9,9 @@ version = '1.9.0-gr2-SNAPSHOT'
 
 library {
     targetMachines = [
-        machines.windows().x86_64(),
-        machines.linux().x86_64(),
-        machines.macOS().x86_64()
+        machines.windows.x86_64,
+        machines.linux.x86_64,
+        machines.macOS.x86_64
     ]
     source.from file('googletest/src/gtest-all.cc')
     publicHeaders.from file('googletest/include')
