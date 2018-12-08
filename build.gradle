@@ -5,7 +5,7 @@ plugins {
 
 group = 'org.gradle.cpp-samples'
 // Encode the Gradle metadata format in the version, until this is stable
-version = '1.9.0-gr2-SNAPSHOT'
+version = '1.9.0-gr3-SNAPSHOT'
 
 library {
     targetMachines = [
